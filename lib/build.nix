@@ -265,7 +265,7 @@ in
 
           buildInputs =
             (attrs.buildInputs or [ ])
-            ++ (optionals (stdenv.isDarwin && darwinMinVersionHook != null) [
+            ++ (optionals (stdenv.hostPlatform.isDarwin && darwinMinVersionHook != null) [
               (darwinMinVersionHook stdenv.targetPlatform.darwinSdkVersion)
             ]);
 
@@ -277,7 +277,7 @@ in
             dependency-groups = mapAttrs (_: mkSpec) package.dev-dependencies;
           };
         }
-        // optionalAttrs stdenv.isDarwin {
+        // optionalAttrs stdenv.hostPlatform.isDarwin {
           sandboxProfile = darwinSandboxProfile;
         }
         // {
@@ -538,7 +538,7 @@ in
               ) selectedWheel'.platformTags
             )
           )
-          ++ (optional (stdenv.isDarwin && darwinMinVersionHook != null) (
+          ++ (optional (stdenv.hostPlatform.isDarwin && darwinMinVersionHook != null) (
             darwinMinVersionHook stdenv.targetPlatform.darwinSdkVersion
           ));
       }
@@ -547,7 +547,7 @@ in
           sourceRoot="$sourceRoot/${subdirectory}"
         '';
       }
-      // optionalAttrs stdenv.isDarwin {
+      // optionalAttrs stdenv.hostPlatform.isDarwin {
         sandboxProfile = darwinSandboxProfile;
       }
     );
