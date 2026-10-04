@@ -505,7 +505,7 @@ in
           optional (hasSuffix ".zip" (self.src.passthru.url or "")) unzip
           ++ optional (format == "pyproject") pyprojectHook
           ++ optional (format == "wheel") pyprojectWheelHook
-          ++ optional (format == "wheel" && stdenv.isLinux) autoPatchelfHook
+          ++ optional (format == "wheel" && stdenv.hostPlatform.isLinux) autoPatchelfHook
           ++ optionals (package-extra-build-dependencies != { }) (
             resolveBuildSystem package-extra-build-dependencies
           );
@@ -519,7 +519,7 @@ in
         # Add wheel utils
         buildInputs =
           # Add manylinux platform dependencies.
-          optionals (stdenv.isLinux && stdenv.hostPlatform.libc == "glibc") (
+          optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.libc == "glibc") (
             unique (
               concatMap (
                 tag:
